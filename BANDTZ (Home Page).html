@@ -100,7 +100,7 @@
     box-shadow:0 0 0 rgb(255, 255, 255);
   }
 
-  /* UPDATED: white hover shadow */
+  /* White hover shadow */
   .photo-card:hover{
     transform:translateY(-4px);
     box-shadow:0 10px 20px rgba(255,255,255,0.30);
@@ -133,7 +133,7 @@
   .photo-info{padding:1rem}
   .photo-title{font-size:1.5rem;margin:0 0 .5rem}
 
-  /* UPDATED: photo-link color behavior (black default, white on hover) and no underlines on <p> */
+  /* Black default, white on hover; no underlines on <p> */
   .photo-info a.photo-link,
   .photo-info a.photo-link p{
     color:#000;
@@ -144,7 +144,6 @@
     color:#fff;
     text-decoration:none;
   }
-  /* Safety: kill any underline that might sneak in */
   .photo-info a{ text-decoration:none; }
   .photo-info a:hover{ text-decoration:none; }
 
@@ -204,9 +203,9 @@
   .toast__close{margin-left:auto; background:transparent; border:none; color:#eaeaea; cursor:pointer; font-size:1.1rem}
 
   footer{background:var(--deep-grey); color:#ffffff; text-align:center; padding:1rem; border-top:1px solid #2a2a2a}
-</style>
-
+  </style>
 </head>
+
 <body>
   <!-- NAV -->
   <nav class="navbar reveal">
@@ -395,7 +394,8 @@
       <h3 id="applyTitle" class="photo-title" style="margin-bottom:.75rem;">Apply to BLKOUTBNDTZ</h3>
       <p style="color:#cfcfcf;margin:.25rem 0 1rem;">Drop your IG and up to 3 photos of your ride.</p>
 
-      <form id="apply-form" action="https://formspree.io/f/xvgdgpgl" method="POST" enctype="multipart/form-data">
+      <!-- Getform endpoint + file field name `files[]` -->
+      <form id="apply-form" action="https://getform.io/f/bllqmmob" method="POST" enctype="multipart/form-data">
         <label class="modal__label">
           <span>Instagram Username</span>
           <input name="instagram" id="ig" placeholder="@handle" required />
@@ -403,7 +403,7 @@
 
         <label class="modal__label">
           <span>Photos (up to 3)</span>
-          <input type="file" id="photos" name="photos" accept="image/*" multiple required />
+          <input type="file" id="photos" name="files[]" accept="image/*,.heic,.heif" multiple required />
           <small class="muted">Max 3 images, 10MB each. JPG/PNG/WEBP/HEIC/HEIF.</small>
         </label>
 
@@ -411,6 +411,9 @@
 
         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
         <input type="hidden" name="_subject" value="New BLKOUTBNDTZ Application" />
+        <!-- Optional redirect after successful submission:
+        <input type="hidden" name="redirect" value="https://yourdomain.com/thank-you.html" />
+        -->
 
         <button class="btn" type="submit" id="apply-submit">Submit</button>
         <p id="apply-msg" class="muted" role="status" style="margin-top:.75rem;"></p>
@@ -425,7 +428,7 @@
     <button class="toast__close" aria-label="Dismiss">&times;</button>
   </div>
 
-  <!-- JS: Reveal, Gallery, Modal, Toast -->
+  <!-- JS: Reveal, Gallery, Modal, Toast, Getform submit -->
   <script>
     (function () {
       /* Reveal on scroll */
@@ -563,6 +566,7 @@
         renderPreview(files);
       });
 
+      /* Submit to Getform using FormData (no manual headers) */
       form?.addEventListener('submit', async (e) => {
         e.preventDefault();
         msg.textContent = '';
@@ -571,17 +575,20 @@
 
         const fd = new FormData(form);
         const files = Array.from(fileIn.files).slice(0, MAX_FILES);
-        fd.delete('photos');
-        files.forEach(f => fd.append('photos', f, f.name));
+        // Ensure we control the files sent (match input name files[])
+        fd.delete('files[]');
+        files.forEach(f => fd.append('files[]', f, f.name));
 
         try {
-          const res = await fetch(form.action, { method:'POST', headers:{ 'Accept':'application/json' }, body:fd });
-          if (res.ok) { showToast("Application sent. We'll reach out on IG."); setTimeout(closeModal, 800); }
-          else {
-            const data = await res.json().catch(() => ({}));
-            throw new Error((data && data.errors && data.errors.map(e=>e.message).join(', ')) || 'Submission failed.');
+          const res = await fetch(form.action, { method:'POST', body:fd });
+          if (res.ok) {
+            showToast("Application sent. We'll reach out on IG.");
+            setTimeout(closeModal, 800);
+          } else {
+            throw new Error(`Submission failed (HTTP ${res.status}).`);
           }
         } catch (err) {
+          console.error(err);
           msg.textContent = 'Error: ' + (err.message || 'Could not submit. Try again.');
           submit.disabled = false; submit.textContent = 'Submit';
         }
