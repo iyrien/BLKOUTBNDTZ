@@ -143,10 +143,10 @@
     border-color:#6b6b6b;
   }
 
-  /* Gallery — HEIGHT INCREASED */
+  /* Gallery — desktop/tablet baseline height */
   .gallery{
     position:relative; width:100%;
-    height: clamp(300px, 58vw, 640px); /* taller overall */
+    height: clamp(300px, 58vw, 640px);
     overflow:hidden; background:#222;
   }
   .gallery img{
@@ -213,18 +213,33 @@
   footer{background:var(--deep-grey); color:#ffffff; text-align:center; padding:1rem; border-top:1px solid #2a2a2a}
 
   /* ===============================
-     MOBILE: 1-COLUMN GRID + TALLER GALLERY
+     MOBILE: 1-COLUMN GRID + 3:4 GALLERY
      =============================== */
   @media (max-width: 600px){
     .photo-grid{
       grid-template-columns: 1fr !important; /* 1 column on phones */
       gap: 14px !important;
     }
+
+    /* Enforce 3:4 aspect on the gallery container */
     .gallery{
-      height: clamp(320px, 72vw, 520px) !important; /* much taller on phones */
+      aspect-ratio: 3 / 4;       /* width : height */
+      height: auto !important;    /* aspect-ratio controls height */
       background:#000;
+      position: relative;
+      overflow: hidden;
     }
-    .gallery .ctrl, .gallery .count{ display: block; } /* show controls again */
+
+    /* Images fill the 3:4 box */
+    .gallery img{
+      position:absolute; inset:0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery .ctrl, .gallery .count{ display: block; }
+
     .photo-info{
       text-align:center; padding: .8rem;
     }
@@ -245,8 +260,31 @@
     .brand{ letter-spacing: var(--tracking-brand); }
     .btn{ letter-spacing: var(--tracking-btn); }
   }
-  @media (max-width: 400px){
-    .gallery{ height: clamp(260px, 78vw, 420px) !important; }
+
+  /* Fallback for browsers that don't support aspect-ratio */
+  @supports not (aspect-ratio: 1) {
+    @media (max-width: 600px){
+      .gallery{
+        height: auto !important;
+      }
+      .gallery::before{
+        content:"";
+        display:block;
+        padding-top: 133.333%;   /* 4/3 of width => 3:4 box */
+      }
+      /* Stack inner content over the padded box */
+      .gallery > img,
+      .gallery > .ctrl,
+      .gallery > .count{
+        position:absolute; inset:0;
+      }
+      .gallery img{
+        width:100%; height:100%; object-fit:cover;
+      }
+      .gallery .prev{ left:10px; top:50%; transform:translateY(-50%); }
+      .gallery .next{ right:10px; top:50%; transform:translateY(-50%); }
+      .gallery .count{ right:10px; bottom:10px; inset:auto 10px 10px auto; }
+    }
   }
 
   /* ===============================
@@ -278,7 +316,8 @@
   .preview-grid img{width:100%; height:100%; object-fit:cover; display:block}
   .preview-grid .remove{position:absolute; top:4px; right:4px; border:none; background:rgba(0,0,0,.55); color:#fff; width:24px; height:24px; line-height:24px; text-align:center; border-radius:999px; cursor:pointer}
   .muted{color:#b0b0b0; font-size:.9rem}
-  </style>
+</style>
+
 </head>
 
 <body>
