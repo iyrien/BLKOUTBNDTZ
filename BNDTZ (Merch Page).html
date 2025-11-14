@@ -25,15 +25,25 @@
       --card:#232323;
       --cardEdge:#3a3a3a;
       --accent:#ff0000;
-      --radius:12px;         /* cards */
-      --radius-btn:10px;     /* squared buttons with soft corners */
+      --radius:12px;
+      --radius-btn:10px;
       --shadow:0 10px 22px rgba(0,0,0,.35);
 
-      /* “thinner” feel with tracking */
+      /* tracking */
       --tracking:2.75px;
       --tracking-head:3.75px;
       --tracking-brand:3px;
       --tracking-btn:2.2px;
+
+      /* Fluid type + spacing */
+      --fs-body: clamp(14px, 1.6vw, 18px);
+      --fs-btn: clamp(.8rem, 2.6vw, .95rem);
+      --fs-h1: clamp(1.4rem, 3.5vw, 2.2rem);
+      --fs-brand: clamp(1.35rem, 3.2vw, 2rem);
+      --fs-hero: clamp(1.6rem, 5.8vw, 3rem);
+      --fs-hero-sub: clamp(1rem, 2.8vw, 1.3rem);
+      --fs-section: clamp(1.25rem, 5.6vw, 2.2rem);
+      --fs-card-title: clamp(1rem, 2.8vw, 1.3rem);
     }
 
     *{box-sizing:border-box}
@@ -44,43 +54,92 @@
       font-weight:300;
       text-rendering:optimizeLegibility;
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font-size: var(--fs-body);
     }
 
-    /* NAVBAR (matches Contact) */
-    .navbar{background:var(--deep-grey);padding:1rem;border-bottom:1px solid #2a2a2a;box-shadow:var(--shadow)}
-    .navbar h1{margin:0;font-family:"Manufacturing Consent",system-ui;font-weight:300;font-size:2.2rem;color:#fff;letter-spacing:var(--tracking-head)}
-    .nav-row{display:flex;justify-content:space-between;align-items:center;gap:.75rem}
-    .brand{display:flex;align-items:center;gap:.35rem;font-size:2rem;line-height:1;letter-spacing:var(--tracking-brand)}
-    .brand img{height:1.15em}
-    .mark img{height:2.6em}
-    .nav-links a{color:#fff;text-decoration:none;margin-left:1.1rem;font-size:1.05rem;letter-spacing:1.2px}
+    /* NAVBAR (3-point layout + sticky) */
+    .navbar{
+      background:var(--deep-grey);
+      padding:1rem;
+      border-bottom:1px solid #2a2a2a;
+      box-shadow:var(--shadow);
+      position:sticky; top:0; z-index:100;
+    }
+    .navbar h1{
+      margin:0;
+      font-family:"Manufacturing Consent",system-ui;
+      font-weight:300;
+      color:#fff;
+      letter-spacing:var(--tracking-head);
+      font-size:var(--fs-h1);
+    }
+    .nav-row{
+      display:grid !important;
+      grid-template-columns: 1fr auto 1fr; /* brand | mark | links */
+      align-items:center;
+      gap:.55rem;
+    }
+    .brand{
+      justify-self:start;
+      display:flex;align-items:center;gap:.25rem;
+      line-height:1;letter-spacing:var(--tracking-brand);
+      font-size:var(--fs-brand);
+    }
+    .brand img{ height: clamp(.9em, 3.2vw, 1.15em); }
+    .mark{ justify-self:center; }
+    .mark img{ height: clamp(1.4em, 6.2vw, 2.6em); }
+    .nav-links{
+      justify-self:end;
+      display:flex;align-items:center;gap: clamp(.6rem, 2.2vw, 1rem);
+    }
+    .nav-links a{
+      margin:0;color:#fff;text-decoration:none;
+      font-size: clamp(.85rem, 2.4vw, 1.05rem);
+      letter-spacing:1.2px;
+    }
     .nav-links a:hover{text-decoration:underline}
     .nav-links .active{color:var(--accent)}
 
-    /* HERO (grid fixes right-text alignment cleanly) */
+    @media (max-width: 900px){
+      .navbar{padding:.7rem .9rem;}
+      .nav-links{
+        width:auto !important; margin-top:0 !important;
+        justify-content:flex-end !important; flex-wrap:nowrap;
+      }
+    }
+    @media (max-width: 480px){
+      .navbar{padding:.55rem .7rem;}
+      .nav-links{max-width:60vw;flex-wrap:wrap;justify-content:flex-end;row-gap:.25rem;}
+      .mark img{height: clamp(1.15em, 7vw, 1.8em);}
+    }
+    @media (max-width: 400px){
+      .mark{display:block !important;}
+    }
+
+    /* HERO */
     .hero{
-      padding:3.2rem 1.25rem 2.2rem;
-      min-height:46vh;
-      display:grid;
-      grid-template-columns: 1fr auto;
-      gap:2rem;
+      padding: clamp(2rem, 4vw, 3.2rem) 1.25rem 2.2rem;
+      min-height: clamp(42vh, 52vh, 58vh);
+      display:grid; grid-template-columns: 1fr auto;
+      gap:clamp(1.2rem, 4vw, 2rem);
       align-items:center;
       background:
         radial-gradient(1200px 500px at 50% 120%, rgba(255,0,0,.08), transparent 60%),
         radial-gradient(700px 400px at -10% -10%, rgba(255,0,0,.06), transparent 60%);
     }
-    .hero h1{font-size:3rem;margin:0;letter-spacing:var(--tracking-head);font-weight:300}
-    .hero p{color:#cfcfcf;margin:.45rem 0 0}
+    .hero h1{font-size:var(--fs-hero);margin:0;letter-spacing:var(--tracking-head);font-weight:300}
+    .hero p{color:#cfcfcf;margin:.45rem 0 0;font-size:var(--fs-hero-sub)}
     .hero .right{text-align:right}
     @media (max-width:860px){
       .hero{grid-template-columns:1fr}
       .hero .right{text-align:left}
     }
 
-    /* BUTTONS (squared) */
+    /* BUTTONS */
     .btn{
-      background:#000;color:#bdbdbd;padding:.6rem 1rem;border:none;border-radius:var(--radius-btn);cursor:pointer;
-      letter-spacing:var(--tracking-btn);text-transform:uppercase;font-size:.9rem;font-weight:300;
+      background:#000;color:#bdbdbd;padding: clamp(.5rem, 1.6vw, .7rem) clamp(.8rem, 2.5vw, 1rem);
+      border:none;border-radius:var(--radius-btn);cursor:pointer;
+      letter-spacing:var(--tracking-btn);text-transform:uppercase;font-size:var(--fs-btn);font-weight:300;
       transition:transform .08s ease, background-color .25s ease, color .25s ease, box-shadow .2s ease;
       box-shadow:0 0 0 rgba(255,0,0,0);
     }
@@ -88,26 +147,46 @@
     .btn:active{transform:translateY(1px) scale(.99)}
     .btn-ghost{background:transparent;border:1px solid var(--cardEdge);color:#eaeaea;border-radius:var(--radius-btn)}
     .btn-ghost:hover{background:#fff;color:#000}
+    .btn.disabled, .btn[disabled]{background:#1f1f1f;color:#777;border:1px dashed #555;cursor:not-allowed;opacity:.95}
 
-    /* PRODUCTS GRID (card style to match Contact) */
+    /* SECTION HEADING */
+    .section-title{margin:0;letter-spacing:var(--tracking-head);font-weight:300;font-size:var(--fs-section)}
+
+    /* PRODUCTS GRID (responsive) */
     .products{
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:1rem;padding:1.25rem 1.25rem 2.25rem;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(clamp(230px, 32vw, 320px),1fr));
+      gap: clamp(.9rem, 2.4vw, 1.3rem);
+      padding:1.25rem 1.25rem 2.25rem;
     }
+    @media (max-width: 900px){
+      .products{ grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 680px){
+      .products{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 380px){
+      .products{ grid-template-columns: 1fr; }
+    }
+
+    /* PRODUCT CARD */
     .product{
       background:var(--card);
       border:1px solid var(--cardEdge);
       border-radius:var(--radius);
       overflow:hidden;
       transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-      box-shadow:0 0 0 rgba(0,0,0,0);
       display:flex;flex-direction:column;
     }
-    .product:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#6b6b6b}
-    .product__media{aspect-ratio: 4/3; background:#101010; display:grid; place-items:center}
+    .product:hover{transform:translateY(-4px);box-shadow:0 10px 20px rgba(255,255,255,0.30);border-color:#6b6b6b}
+    .product__media{
+      aspect-ratio: 4/3;
+      background:#101010;
+      display:grid; place-items:center;
+    }
     .product img{width:100%;height:100%;object-fit:cover;display:block}
-    .product__body{padding:1rem}
-    .product__title{font-size:1.3rem;margin:.1rem 0 .35rem;letter-spacing:1.1px;font-weight:300}
+    .product__body{padding: clamp(.8rem, 2.2vw, 1rem)}
+    .product__title{font-size:var(--fs-card-title);margin:.1rem 0 .35rem;letter-spacing:1.1px;font-weight:300}
     .product__desc{margin:0;color:#c8c8c8;font-size:.98rem;line-height:1.35}
     .meta{display:flex;justify-content:space-between;align-items:center;margin-top:.75rem}
     .price{font-size:1.05rem;letter-spacing:1px;color:#fff}
@@ -128,12 +207,11 @@
     .ribbon::before{ left:6px; transform:skewX(-15deg) }
     .ribbon::after{ right:6px; transform:skewX(15deg) }
 
-    /* DISABLED CTA */
-    .btn.disabled, .btn[disabled]{background:#1f1f1f;color:#777;border:1px dashed #555;cursor:not-allowed;opacity:.95}
-
     /* REVEAL */
     .reveal{opacity:0; transform:translateY(38px); transition:opacity .85s ease .12s, transform .85s ease .12s}
     .reveal.show{opacity:1; transform:translateY(0)}
+
+    footer{background:var(--deep-grey);text-align:center;padding:1.1rem;color:#fff;border-top:1px solid #2a2a2a}
   </style>
 </head>
 <body>
@@ -183,7 +261,7 @@
       <article class="product" style="position:relative">
         <span class="ribbon" aria-hidden="true">Coming Soon</span>
         <div class="product__media">
-          <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/BNDTZ%20(running%20man)_White_Copy.PNG?raw=true">
+          <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/BNDTZ%20(running%20man)_White_Copy.PNG?raw=true" alt="">
         </div>
         <div class="product__body">
           <h3 class="product__title">Classic Logo Tee</h3>
@@ -199,7 +277,7 @@
       <article class="product" style="position:relative">
         <span class="ribbon" aria-hidden="true">Coming Soon</span>
         <div class="product__media">
-          <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/BNDTZ%20(running%20man)_White_Copy.PNG?raw=true">
+          <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/BNDTZ%20(running%20man)_White_Copy.PNG?raw=true" alt="">
         </div>
         <div class="product__body">
           <h3 class="product__title">Long Sleeve</h3>
@@ -215,7 +293,7 @@
       <article class="product" style="position:relative">
         <span class="ribbon" aria-hidden="true">Coming Soon</span>
         <div class="product__media">
-          <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/BNDTZ%20(running%20man)_White_Copy.PNG?raw=true">
+          <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/BNDTZ%20(running%20man)_White_Copy.PNG?raw=true" alt="">
         </div>
         <div class="product__body">
           <h3 class="product__title">Limited Sticker\Decal Pack</h3>
@@ -229,16 +307,21 @@
     </section>
   </main>
 
-  <footer style="background:var(--deep-grey);text-align:center;padding:1.1rem;color:#fff;border-top:1px solid #2a2a2a">
+  <footer>
     <p>&copy; 2025 BLKOUTBNDTZ. All rights reserved.</p>
   </footer>
 
   <script>
-    // Reveal on scroll (same behavior as Contact)
+    // Reveal on scroll (same behavior as other pages)
     (function(){
       const targets=document.querySelectorAll(".reveal");
       const io=new IntersectionObserver((entries,obs)=>{
-        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("show"); obs.unobserve(e.target);} });
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            e.target.classList.add("show");
+            obs.unobserve(e.target);
+          }
+        });
       },{threshold:.2});
       targets.forEach(t=>io.observe(t));
     })();
