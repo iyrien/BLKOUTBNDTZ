@@ -152,7 +152,7 @@
     /* SECTION HEADING */
     .section-title{margin:0;letter-spacing:var(--tracking-head);font-weight:300;font-size:var(--fs-section)}
 
-    /* PRODUCTS GRID (responsive) */
+    /* PRODUCTS GRID (now 1-column on all mobile ≤600px) */
     .products{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(clamp(230px, 32vw, 320px),1fr));
@@ -165,8 +165,9 @@
     @media (max-width: 680px){
       .products{ grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 380px){
-      .products{ grid-template-columns: 1fr; }
+    /* Force 1 column on phones/tablets ≤600px */
+    @media (max-width: 600px){
+      .products{ grid-template-columns: 1fr !important; }
     }
 
     /* PRODUCT CARD */
@@ -312,7 +313,7 @@
   </footer>
 
   <script>
-    // Reveal on scroll (same behavior as other pages)
+    // Reveal on scroll
     (function(){
       const targets=document.querySelectorAll(".reveal");
       const io=new IntersectionObserver((entries,obs)=>{
