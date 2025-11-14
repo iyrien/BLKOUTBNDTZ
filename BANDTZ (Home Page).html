@@ -143,10 +143,10 @@
     border-color:#6b6b6b;
   }
 
-  /* GALLERY */
+  /* Gallery — HEIGHT INCREASED */
   .gallery{
     position:relative; width:100%;
-    height: clamp(300px, 58vw, 640px);
+    height: clamp(300px, 58vw, 640px); /* taller overall */
     overflow:hidden; background:#222;
   }
   .gallery img{
@@ -213,24 +213,18 @@
   footer{background:var(--deep-grey); color:#ffffff; text-align:center; padding:1rem; border-top:1px solid #2a2a2a}
 
   /* ===============================
-     MOBILE: 1-COLUMN + SHOW FULL IMAGE
+     MOBILE: 1-COLUMN GRID + TALLER GALLERY
      =============================== */
   @media (max-width: 600px){
     .photo-grid{
-      grid-template-columns: 1fr !important;
+      grid-template-columns: 1fr !important; /* 1 column on phones */
       gap: 14px !important;
     }
     .gallery{
-      height: clamp(320px, 72vw, 520px) !important;
-      background:#000; /* letterboxing looks clean */
+      height: clamp(320px, 72vw, 520px) !important; /* much taller on phones */
+      background:#000;
     }
-    /* KEY CHANGE: show entire image on phones (no crop) */
-    .gallery img{
-      object-fit: contain !important;
-      transform: none !important;
-    }
-    .gallery img.active{ transform: none !important; }
-    .gallery .ctrl, .gallery .count{ display: block; }
+    .gallery .ctrl, .gallery .count{ display: block; } /* show controls again */
     .photo-info{
       text-align:center; padding: .8rem;
     }
@@ -259,7 +253,7 @@
      MODAL FIX: true overlay + centering
      =============================== */
   .modal{
-    position:fixed; inset:0; display:none; z-index: 20000;
+    position:fixed; inset:0; display:none; z-index: 20000;  /* above everything */
   }
   .modal[aria-hidden="false"]{
     display:flex; align-items:center; justify-content:center;
@@ -270,7 +264,7 @@
     max-height: min(86vh, 820px);
     background:#2a2a2a; border:1px solid var(--metallic); border-radius:14px;
     padding:1.2rem; color:#e7e7e7; box-shadow:0 20px 50px rgba(0,0,0,.65);
-    overflow:auto;
+    overflow:auto;   /* scroll inside the panel if needed on small screens */
   }
   .modal__close{position:absolute; top:8px; right:10px; background:transparent; border:none; color:#fff; font-size:1.6rem; cursor:pointer}
   .modal__label{display:block; margin:0 0 .9rem}
@@ -602,7 +596,7 @@
 
       openBtn?.addEventListener('click', openModal);
       modal?.addEventListener('click', (e) => {
-        if (e.target.matches('[data-close], .modal__backdrop'])) closeModal();
+        if (e.target.matches('[data-close], .modal__backdrop')) closeModal();
       });
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
