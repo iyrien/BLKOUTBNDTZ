@@ -99,8 +99,6 @@
     overflow:hidden; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     box-shadow:0 0 0 rgb(255, 255, 255);
   }
-
-  /* White hover shadow */
   .photo-card:hover{
     transform:translateY(-4px);
     box-shadow:0 10px 20px rgba(255,255,255,0.30);
@@ -203,6 +201,100 @@
   .toast__close{margin-left:auto; background:transparent; border:none; color:#eaeaea; cursor:pointer; font-size:1.1rem}
 
   footer{background:var(--deep-grey); color:#ffffff; text-align:center; padding:1rem; border-top:1px solid #2a2a2a}
+
+  /* ================================
+     RESPONSIVE ADD-ON (merged)
+     ================================ */
+
+  /* Fluid type + controls */
+  :root{
+    --fs-body: clamp(14px, 1.6vw, 18px);
+    --fs-btn: clamp(.8rem, 2.6vw, .95rem);
+    --fs-h1: clamp(1.4rem, 3.5vw, 2.2rem);
+    --fs-brand: clamp(1.35rem, 3.2vw, 2rem);
+    --fs-hero: clamp(1.5rem, 6vw, 3.2rem);
+    --fs-hero-sub: clamp(1rem, 2.8vw, 1.35rem);
+    --fs-section: clamp(1.25rem, 5.6vw, 2.2rem);
+  }
+
+  /* Base scale */
+  body { font-size: var(--fs-body); }
+  .navbar h1 { font-size: var(--fs-h1); }
+  .brand { font-size: var(--fs-brand); }
+  .hero h2 { font-size: var(--fs-hero); }
+  .hero .hero-content { font-size: var(--fs-hero-sub); }
+  .section-title { font-size: var(--fs-section); }
+  .btn { font-size: var(--fs-btn); padding: clamp(.5rem, 1.6vw, .7rem) clamp(.8rem, 2.5vw, 1rem); }
+
+  /* Make the hero height and gallery height fluid */
+  .hero { 
+    min-height: clamp(46vh, 60vh, 62vh);
+    padding: clamp(2rem, 4vw, 3.2rem) 1.25rem 2.2rem;
+  }
+  .gallery { 
+    height: clamp(220px, 56vw, 550px);
+  }
+
+  /* Improve grid behavior on narrow screens */
+  .photo-grid {
+    grid-template-columns: repeat(auto-fit, minmax(clamp(230px, 44vw, 300px), 1fr));
+    gap: clamp(.75rem, 2vw, 1.2rem);
+  }
+
+  /* Tighter marquee spacing on small screens */
+  .marquee { padding-block: clamp(.25rem, 1.2vw, .5rem); }
+
+  /* Nav refinements */
+  .nav-row { flex-wrap: wrap; }
+  .mark img { height: clamp(1.8em, 6vw, 2.6em); }
+  .brand img { height: 1em; }
+  .nav-links a { font-size: clamp(.9rem, 2.4vw, 1.05rem); margin-left: clamp(.7rem, 2.2vw, 1.1rem); }
+
+  /* Breakpoint: tablets and down */
+  @media (max-width: 900px){
+    .nav-links{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: clamp(.6rem, 2.2vw, 1rem);
+      margin-top: .35rem;
+    }
+  }
+
+  /* Breakpoint: phones */
+  @media (max-width: 600px){
+    :root{
+      --tracking: 1.6px;
+      --tracking-head: 2.4px;
+      --tracking-brand: 2px;
+      --tracking-btn: 1.5px;
+    }
+    body{ letter-spacing: var(--tracking); }
+    .navbar h1{ letter-spacing: var(--tracking-head); }
+    .brand{ letter-spacing: var(--tracking-brand); }
+    .btn{ letter-spacing: var(--tracking-btn); }
+
+    .hero { min-height: clamp(50vh, 58vh, 60vh); }
+
+    /* Override the inline font-size on the marquee heading */
+    .marquee .section-title { font-size: clamp(1.15rem, 6.6vw, 1.6rem) !important; }
+
+    /* Keep card logos contained on phones (override inline sizes) */
+    .photo-info img{
+      width: 100% !important;
+      height: auto !important;
+      max-width: 320px;
+    }
+
+    .photo-card{ border-radius: 10px; }
+    .gallery .ctrl{ width: 44px; height: 44px; }
+  }
+
+  /* Very small phones */
+  @media (max-width: 400px){
+    .mark{ display: none; }
+    .gallery{ height: clamp(200px, 62vw, 420px); }
+  }
   </style>
 </head>
 
@@ -411,9 +503,6 @@
 
         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
         <input type="hidden" name="_subject" value="New BLKOUTBNDTZ Application" />
-        <!-- Optional redirect after successful submission:
-        <input type="hidden" name="redirect" value="https://yourdomain.com/thank-you.html" />
-        -->
 
         <button class="btn" type="submit" id="apply-submit">Submit</button>
         <p id="apply-msg" class="muted" role="status" style="margin-top:.75rem;"></p>
@@ -575,7 +664,6 @@
 
         const fd = new FormData(form);
         const files = Array.from(fileIn.files).slice(0, MAX_FILES);
-        // Ensure we control the files sent (match input name files[])
         fd.delete('files[]');
         files.forEach(f => fd.append('files[]', f, f.name));
 
