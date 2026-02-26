@@ -112,12 +112,12 @@
 
   /* BUTTONS */
   .btn{
-    background:#000;color:#bdbdbd;padding: clamp(.5rem, 1.6vw, .7rem) clamp(.8rem, 2.5vw, 1rem);
-    border:none;border-radius:var(--radius-btn);cursor:pointer;
+    background:rgba(255,0,0,.15);color:#fff;padding: clamp(.5rem, 1.6vw, .7rem) clamp(.8rem, 2.5vw, 1rem);
+    border:1px solid rgba(255,0,0,.35);border-radius:var(--radius-btn);cursor:pointer;
     letter-spacing:var(--tracking-btn);text-transform:uppercase;font-size:var(--fs-btn);font-weight:300;
-    transition:transform .08s ease, background-color .25s ease, color .25s ease, box-shadow .2s ease;
+    transition:transform .08s ease, background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .2s ease;
   }
-  .btn:hover{background:#fff;color:#010101;box-shadow:0 6px 18px rgba(255,255,255,.22)}
+  .btn:hover{background:var(--accent);color:#000;border-color:var(--accent);box-shadow:0 6px 18px rgba(255,0,0,.35)}
   .btn:active{transform:translateY(1px) scale(.99)}
 
   /* SECTION */
@@ -217,20 +217,23 @@
      =============================== */
   @media (max-width: 600px){
     .photo-grid{
-      grid-template-columns: 1fr !important; /* 1 column on phones */
+      grid-template-columns: 1fr !important;
       gap: 14px !important;
     }
+    .filter-tabs{
+      justify-content: center !important;
+      margin-bottom: 1.5rem !important;
+      
+    }
 
-    /* Enforce 3:4 aspect on the gallery container */
     .gallery{
-      aspect-ratio: 3 / 4;       /* width : height */
-      height: auto !important;    /* aspect-ratio controls height */
+      aspect-ratio: 3 / 4;
+      height: auto !important;
       background:#000;
       position: relative;
       overflow: hidden;
     }
 
-    /* Images fill the 3:4 box */
     .gallery img{
       position:absolute; inset:0;
       width: 100%;
@@ -261,7 +264,6 @@
     .btn{ letter-spacing: var(--tracking-btn); }
   }
 
-  /* Fallback for browsers that don't support aspect-ratio */
   @supports not (aspect-ratio: 1) {
     @media (max-width: 600px){
       .gallery{
@@ -270,9 +272,8 @@
       .gallery::before{
         content:"";
         display:block;
-        padding-top: 133.333%;   /* 4/3 of width => 3:4 box */
+        padding-top: 133.333%;
       }
-      /* Stack inner content over the padded box */
       .gallery > img,
       .gallery > .ctrl,
       .gallery > .count{
@@ -291,7 +292,7 @@
      MODAL FIX: true overlay + centering
      =============================== */
   .modal{
-    position:fixed; inset:0; display:none; z-index: 20000;  /* above everything */
+    position:fixed; inset:0; display:none; z-index: 20000;
   }
   .modal[aria-hidden="false"]{
     display:flex; align-items:center; justify-content:center;
@@ -302,7 +303,7 @@
     max-height: min(86vh, 820px);
     background:#2a2a2a; border:1px solid var(--metallic); border-radius:14px;
     padding:1.2rem; color:#e7e7e7; box-shadow:0 20px 50px rgba(0,0,0,.65);
-    overflow:auto;   /* scroll inside the panel if needed on small screens */
+    overflow:auto;
   }
   .modal__close{position:absolute; top:8px; right:10px; background:transparent; border:none; color:#fff; font-size:1.6rem; cursor:pointer}
   .modal__label{display:block; margin:0 0 .9rem}
@@ -317,11 +318,11 @@
   .preview-grid .remove{position:absolute; top:4px; right:4px; border:none; background:rgba(0,0,0,.55); color:#fff; width:24px; height:24px; line-height:24px; text-align:center; border-radius:999px; cursor:pointer}
   .muted{color:#b0b0b0; font-size:.9rem}
 
-   footer{
-      background:var(--deep-grey); text-align:center; padding:1.1rem; color:#fff; border-top:1px solid #2a2a2a
-    }
-    footer a{color:#fff; text-decoration:none}
-    footer a:hover{text-decoration:underline}
+  footer{
+    background:var(--deep-grey); text-align:center; padding:1.1rem; color:#fff; border-top:1px solid #2a2a2a
+  }
+  footer a{color:#fff; text-decoration:none}
+  footer a:hover{text-decoration:underline}
 </style>
 
 </head>
@@ -377,7 +378,17 @@
         <span>Meet The Bandtz&nbsp;&middot;&nbsp;</span></span>
       </h2>
     </div>
-
+  
+  <div class="filter-tabs" style="display:flex; justify-content:center; font-family: 'Pirata One', system-ui; gap: clamp(.8rem, 2.5vw, 1.2rem); margin-bottom:1.5rem;">
+    <button class="btn" data-filter="all">All</button>
+    <button class="btn" data-filter="Hellcats">Hellcats</button>
+    <button class="btn" data-filter="392 SRT Scat">392 SRT Scats</button>
+    <button class="btn" data-filter="Charger RT">Charger RTs</button>
+    <button class="btn" data-filter="Mustangs">Mustangs</button>
+    <button class="btn" data-filter="Charger SXT">Charger SXTs</button>
+  </div>
+    
+  </div>
  <div class="photo-grid">
   <!-- CARD 1 -->
   <div class="photo-card reveal">
@@ -417,7 +428,7 @@
 
   <!-- CARD 3 -->
   <div class="photo-card reveal">
-    <div class="gallery" data-name="797 Hellcat">
+    <div class="gallery" data-name="Hellcats">
       <img class="active" src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_7064.jpg?raw=true" alt="Hellcat angle" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_0215.jpg?raw=true" alt="Hellcat detail" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_0236.jpg?raw=true" alt="Hellcat interior" loading="lazy">
@@ -437,7 +448,7 @@
 
   <!-- CARD 4 -->
   <div class="photo-card reveal">
-    <div class="gallery" data-name="18' Eco Boost">
+    <div class="gallery" data-name="Mustangs">
       <img class="active" src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_6889.jpeg?raw=true" alt="EcoBoost front" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_6856.jpg?raw=true" alt="EcoBoost detail" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_6840.jpg?raw=true" alt="EcoBoost detail" loading="lazy">
@@ -490,7 +501,7 @@
 
   <!-- CARD 7 -->
   <div class="photo-card reveal">
-    <div class="gallery" data-name="Challenger SRT">
+    <div class="gallery" data-name="Hellcats">
       <img class="active" src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/E9A76579-2ABD-45F8-B2BA-6C576D90025B.JPG?raw=true" alt="Challenger RT front" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/46744EAC-5E7E-49DC-8A91-42831592816F.JPG?raw=true" alt="Challenger RT rear" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/31600D8C-4342-408B-9165-3BEF96676A7A.JPG?raw=true" alt="Challenger RT detail" loading="lazy">
@@ -507,7 +518,7 @@
 
   <!-- CARD 8 -->
   <div class="photo-card reveal">
-    <div class="gallery" data-name="Challenger SRT">
+    <div class="gallery" data-name="Hellcats">
       <img class="active" src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_7419.JPG?raw=true" alt="Challenger RT front" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_7420.JPG?raw=true" alt="Challenger RT rear" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_7422.JPG?raw=true" alt="Challenger RT detail" loading="lazy">
@@ -526,7 +537,7 @@
 
   <!-- CARD 9 -->
   <div class="photo-card reveal">
-    <div class="gallery" data-name="Challenger SRT">
+    <div class="gallery" data-name="Hellcats">
       <img class="active" src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_7421.JPG?raw=true" alt="Challenger RT front" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_7426.JPG?raw=true" alt="Challenger RT rear" loading="lazy">
       <img src="https://github.com/iyrien/BLKOUTBNDTZ/blob/main/IMG_7425.JPG?raw=true" alt="Challenger RT detail" loading="lazy">
@@ -678,6 +689,35 @@
   <!-- JS: Reveal, Gallery, Modal, Toast, Getform submit -->
   <script>
     (function () {
+    /* Filter tabs */
+    const filterBtns = document.querySelectorAll('.btn');
+    const photoCards = document.querySelectorAll('.photo-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filterValue = btn.getAttribute('data-filter');
+        
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        btn.style.background = 'var(--accent)';
+        btn.style.color = '#000';
+        filterBtns.forEach(b => {
+          if (b !== btn) {
+            b.style.background = '';
+            b.style.color = '';
+          }
+        });
+        
+        photoCards.forEach(card => {
+          const cardName = card.querySelector('.gallery').getAttribute('data-name');
+          if (filterValue === 'all' || cardName === filterValue) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
       /* Reveal on scroll */
       const targets = document.querySelectorAll(".reveal");
       document.querySelectorAll(".photo-grid .photo-card.reveal").forEach((el, i) => {
@@ -843,4 +883,3 @@
   </script>
 </body>
 </html>
-
